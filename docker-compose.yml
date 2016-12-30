@@ -1,0 +1,33 @@
+version: '2'
+services:
+  phpfpm:
+    image: rlewkowicz/php-fpm:7.0.13
+    volumes:
+    - "/mnt/cephfs/SwarmDemo/distribution-files/etc:/usr/local/etc"
+    - "/mnt/cephfs/SwarmDemo/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+    - "/etc/passwd:/etc/passwd:ro"
+    - "/etc/shadow:/etc/shadow:ro"
+    - "/etc/group:/etc/group:ro"
+  nginx:
+    image: nginx:1.10
+    ports:
+    - "80:80"
+    - "443:443"
+    volumes:
+    - "/mnt/cephfs/SwarmDemo/distribution-files/nginx:/etc/nginx"
+    - "/mnt/cephfs/SwarmDemo/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+    - "/etc/passwd:/etc/passwd:ro"
+    - "/etc/shadow:/etc/shadow:ro"
+    - "/etc/group:/etc/group:ro"
+    depends_on:
+    - phpfpm
+  mysql:
+    image: mariadb:10.0
+    volumes:
+    - "/mnt/cephfs/SwarmDemo/distribution-files/mysql:/var/lib/mysql"
+    environment:
+    - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
+    - MYSQL_USER=root@myadmin
+    - MYSQL_PASSWORD=@6gRzU2k8%
+    depends_on:
+    - nginx
