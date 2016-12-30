@@ -428,7 +428,6 @@ $wgScriptExtension  = ".php";
 #VISUAL EDITOR
 
 # Enable Visual editor
-require_once "$IP/extensions/VisualEditor/VisualEditor.php";
 
 // Enable by default for everybody
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
