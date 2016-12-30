@@ -13,7 +13,7 @@ services:
       - wiki
     deploy:
       placement:
-        constraints: [node.role == manager]
+        constraints: [node.role == worker]
 
   nginx:
     image: nginx:1.10
