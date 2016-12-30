@@ -1742,7 +1742,7 @@ $wgUsersNotifiedOnAllChanges = [];
 /**
  * Database host name or IP address
  */
-$wgDBserver = 'localhost';
+$wgDBserver = 'mysql';
 
 /**
  * Database port number (for PostgreSQL and Microsoft SQL Server).
