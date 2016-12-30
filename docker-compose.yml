@@ -1,33 +1,55 @@
-version: '2'
+version: "3"
+
 services:
   phpfpm:
     image: rlewkowicz/php-fpm:7.0.13
     volumes:
-    - "/mnt/cephfs/SwarmDemo/distribution-files/etc:/usr/local/etc"
-    - "/mnt/cephfs/SwarmDemo/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
-    - "/etc/passwd:/etc/passwd:ro"
-    - "/etc/shadow:/etc/shadow:ro"
-    - "/etc/group:/etc/group:ro"
+      - "/mnt/cephfs/deploybasic/distribution-files/etc:/usr/local/etc"
+      - "/mnt/cephfs/deploybasic/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "/etc/group:/etc/group:ro"
+    networks:
+      - wiki
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
   nginx:
     image: nginx:1.10
     ports:
-    - "80:80"
-    - "443:443"
+      - "80:80"
+      - "443:443"
     volumes:
-    - "/mnt/cephfs/SwarmDemo/distribution-files/nginx:/etc/nginx"
-    - "/mnt/cephfs/SwarmDemo/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
-    - "/etc/passwd:/etc/passwd:ro"
-    - "/etc/shadow:/etc/shadow:ro"
-    - "/etc/group:/etc/group:ro"
+      - "/mnt/cephfs/deploybasic/distribution-files/nginx:/etc/nginx"
+      - "/mnt/cephfs/deploybasic/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "/etc/group:/etc/group:ro"
     depends_on:
-    - phpfpm
+      - phpfpm
+      - parsoid
+    networks:
+      - wiki
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
   mysql:
     image: mariadb:10.0
+    networks:
+      - wiki
     volumes:
-    - "/mnt/cephfs/SwarmDemo/distribution-files/mysql:/var/lib/mysql"
+      - "/mnt/cephfs/deploybasic/distribution-files/mysql:/var/lib/mysql"
     environment:
-    - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
-    - MYSQL_USER=root@myadmin
-    - MYSQL_PASSWORD=@6gRzU2k8%
+      - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
+      - MYSQL_USER=root@myadmin
+      - MYSQL_PASSWORD=@6gRzU2k8%
     depends_on:
-    - nginx
+      - nginx
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+
+networks:
+  wiki:
