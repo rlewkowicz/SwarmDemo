@@ -4,8 +4,8 @@ services:
   phpfpm:
     image: rlewkowicz/php-fpm:7.0.13
     volumes:
-      - "/mnt/cephfs/deploybasic/distribution-files/etc:/usr/local/etc"
-      - "/mnt/cephfs/deploybasic/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/mnt/cephfs/dev/distribution-files/etc:/usr/local/etc"
+      - "/mnt/cephfs/dev/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/shadow:/etc/shadow:ro"
       - "/etc/group:/etc/group:ro"
@@ -21,8 +21,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "/mnt/cephfs/deploybasic/distribution-files/nginx:/etc/nginx"
-      - "/mnt/cephfs/deploybasic/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/mnt/cephfs/dev/distribution-files/nginx:/etc/nginx"
+      - "/mnt/cephfs/dev/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/shadow:/etc/shadow:ro"
       - "/etc/group:/etc/group:ro"
@@ -40,7 +40,7 @@ services:
     networks:
       - wiki
     volumes:
-      - "/mnt/cephfs/deploybasic/distribution-files/mysql:/var/lib/mysql"
+      - "/mnt/cephfs/dev/distribution-files/mysql:/var/lib/mysql"
     environment:
       - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
       - MYSQL_USER=root@myadmin
