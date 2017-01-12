@@ -9,8 +9,6 @@ services:
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/shadow:/etc/shadow:ro"
       - "/etc/group:/etc/group:ro"
-    networks:
-      - wiki
     deploy:
       placement:
         constraints: [node.role == worker]
@@ -29,16 +27,12 @@ services:
     depends_on:
       - phpfpm
       - parsoid
-    networks:
-      - wiki
     deploy:
       placement:
         constraints: [node.role == manager]
 
   mysql:
     image: mariadb:10.0
-    networks:
-      - wiki
     volumes:
       - "/mnt/cephfs/dev/distribution-files/mysql:/var/lib/mysql"
     environment:
@@ -50,6 +44,3 @@ services:
     deploy:
       placement:
         constraints: [node.role == worker]
-
-networks:
-  wiki:
