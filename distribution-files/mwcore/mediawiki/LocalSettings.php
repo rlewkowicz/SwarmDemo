@@ -29,7 +29,6 @@ $wgMetaNamespace = "MediaWiki_1.28.0_installation";
 $wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "https://54.214.136.97";
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
@@ -163,4 +162,3 @@ wfLoadExtension( 'Interwiki' );
 wfLoadExtension( 'Poem' );
 wfLoadExtension( 'SyntaxHighlight_GeSHi' );
 wfLoadExtension( 'WikiEditor' );
-

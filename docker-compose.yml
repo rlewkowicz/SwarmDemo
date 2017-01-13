@@ -9,15 +9,14 @@ services:
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/shadow:/etc/shadow:ro"
       - "/etc/group:/etc/group:ro"
+    networks:
+      - dev
     deploy:
       placement:
         constraints: [node.role == worker]
 
   nginx:
     image: nginx:1.10
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       - "/mnt/cephfs/dev/distribution-files/nginx:/etc/nginx"
       - "/mnt/cephfs/dev/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
@@ -27,9 +26,11 @@ services:
     depends_on:
       - phpfpm
       - parsoid
+    networks:
+      - dev
+      - traefik
     deploy:
-      placement:
-        constraints: [node.role == manager]
+      labels: [traefik.port=443,traefik.protocol=https, "traefik.frontend.entryPoints=http,https","traefik.frontend.rule=Host:dev"]
 
   mysql:
     image: mariadb:10.0
@@ -41,6 +42,9 @@ services:
       - MYSQL_PASSWORD=@6gRzU2k8%
     depends_on:
       - nginx
-    deploy:
-      placement:
-        constraints: [node.role == worker]
+    networks:
+      - dev
+
+  networks:
+    traefik:
+    dev:
