@@ -45,6 +45,6 @@ services:
     networks:
       - dev
 
-  networks:
-    traefik:
-    dev:
+networks:
+  traefik:
+  dev:

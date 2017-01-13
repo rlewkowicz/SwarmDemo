@@ -1,0 +1,27 @@
+# traefik.toml
+################################################################
+# Global configuration
+################################################################
+
+debug = true
+logLevel = "DEBUG"
+InsecureSkipVerify = true
+
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+      entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+      [[entryPoints.https.tls.certificates]]
+      CertFile = "/traefik.crt"
+      KeyFile = "/traefik.key"
+
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+swarmmode = true
+watch = true
