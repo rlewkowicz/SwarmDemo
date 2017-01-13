@@ -1,50 +1,19 @@
 version: "3"
 
-services:
-  phpfpm:
-    image: rlewkowicz/php-fpm:7.0.13
-    volumes:
-      - "/mnt/cephfs/dev/distribution-files/etc:/usr/local/etc"
-      - "/mnt/cephfs/dev/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/shadow:/etc/shadow:ro"
-      - "/etc/group:/etc/group:ro"
-    networks:
-      - dev
-    deploy:
-      placement:
-        constraints: [node.role == worker]
-
-  nginx:
-    image: nginx:1.10
-    volumes:
-      - "/mnt/cephfs/dev/distribution-files/nginx:/etc/nginx"
-      - "/mnt/cephfs/dev/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/shadow:/etc/shadow:ro"
-      - "/etc/group:/etc/group:ro"
-    depends_on:
-      - phpfpm
-      - parsoid
-    networks:
-      - dev
-      - traefik
-    deploy:
-      labels: [traefik.port=443,traefik.protocol=https, "traefik.frontend.entryPoints=http,https","traefik.frontend.rule=Host:dev"]
-
-  mysql:
-    image: mariadb:10.0
-    volumes:
-      - "/mnt/cephfs/dev/distribution-files/mysql:/var/lib/mysql"
-    environment:
-      - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
-      - MYSQL_USER=root@myadmin
-      - MYSQL_PASSWORD=@6gRzU2k8%
-    depends_on:
-      - nginx
-    networks:
-      - dev
-
-networks:
-  traefik:
-  dev:
+traefik:
+  image: traefik
+  command: --docker --docker.swarmmode --docker.domain=traefik --docker.watch --web --configFile=/traefik.toml
+  ports:
+    - "80:80"
+    - "8080:8080"
+    - "443:443"
+  volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    - "/mnt/cephfs/traefik/distribution-files/traefik/traefik.toml:/traefik.toml"
+    - "/mnt/cephfs/traefik/distribution-files/nginx/ssl/wildcard.cert:/traefik.crt"
+    - "/mnt/cephfs/traefik/distribution-files/nginx/ssl/wildcard.key:/traefik.key"
+  networks:
+    traefik
+  deploy:
+    placement:
+      constraints: [node.role == manager]
