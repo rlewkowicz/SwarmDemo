@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  phpfpm:
+    image: rlewkowicz/php-fpm:7.0.13
+    volumes:
+      - "/mnt/cephfs/stg/distribution-files/etc:/usr/local/etc"
+      - "/mnt/cephfs/stg/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "/etc/group:/etc/group:ro"
+    networks:
+      - stg
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+
+  nginx:
+    image: nginx:1.10
+    volumes:
+      - "/mnt/cephfs/stg/distribution-files/nginx:/etc/nginx"
+      - "/mnt/cephfs/stg/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "/etc/group:/etc/group:ro"
+    depends_on:
+      - phpfpm
+      - parsoid
+    networks:
+      - stg
+      - traefik
+    deploy:
+      labels: [traefik.port=443,traefik.protocol=https, "traefik.frontend.entryPoints=http,https","traefik.frontend.rule=Host:stg", traefik.docker.network=traefik]
+
+  mysql:
+    image: mariadb:10.0
+    volumes:
+      - "/mnt/cephfs/stg/distribution-files/mysql:/var/lib/mysql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
+      - MYSQL_USER=root@myadmin
+      - MYSQL_PASSWORD=@6gRzU2k8%
+    depends_on:
+      - nginx
+    networks:
+      - stg
+
+
+networks:
+  stg:
+  traefik:
+    external:
+      name: traefik
