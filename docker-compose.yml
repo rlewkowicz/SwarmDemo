@@ -4,13 +4,13 @@ services:
   phpfpm:
     image: rlewkowicz/php-fpm:7.0.13
     volumes:
-      - "/mnt/cephfs/stg/distribution-files/etc:/usr/local/etc"
-      - "/mnt/cephfs/stg/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/mnt/cephfs/prod/distribution-files/etc:/usr/local/etc"
+      - "/mnt/cephfs/prod/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/shadow:/etc/shadow:ro"
       - "/etc/group:/etc/group:ro"
     networks:
-      - stg
+      - prod
     deploy:
       placement:
         constraints: [node.role == worker]
@@ -18,8 +18,8 @@ services:
   nginx:
     image: nginx:1.10
     volumes:
-      - "/mnt/cephfs/stg/distribution-files/nginx:/etc/nginx"
-      - "/mnt/cephfs/stg/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/mnt/cephfs/prod/distribution-files/nginx:/etc/nginx"
+      - "/mnt/cephfs/prod/distribution-files/mwcore/mediawiki:/var/www/mediawiki"
       - "/etc/passwd:/etc/passwd:ro"
       - "/etc/shadow:/etc/shadow:ro"
       - "/etc/group:/etc/group:ro"
@@ -27,15 +27,15 @@ services:
       - phpfpm
       - parsoid
     networks:
-      - stg
+      - prod
       - traefik
     deploy:
-      labels: [traefik.port=443,traefik.protocol=https, "traefik.frontend.entryPoints=http,https","traefik.frontend.rule=Host:stg", traefik.docker.network=traefik]
+      labels: [traefik.port=443,traefik.protocol=https, "traefik.frontend.entryPoints=http,https","traefik.frontend.rule=Host:prod", traefik.docker.network=traefik]
 
   mysql:
     image: mariadb:10.0
     volumes:
-      - "/mnt/cephfs/stg/distribution-files/mysql:/var/lib/mysql"
+      - "/mnt/cephfs/prod/distribution-files/mysql:/var/lib/mysql"
     environment:
       - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
       - MYSQL_USER=root@myadmin
@@ -43,11 +43,11 @@ services:
     depends_on:
       - nginx
     networks:
-      - stg
+      - prod
 
 
 networks:
-  stg:
+  prod:
   traefik:
     external:
       name: traefik
