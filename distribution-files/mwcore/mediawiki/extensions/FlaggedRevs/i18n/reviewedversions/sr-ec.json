@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Charmed94",
+			"Milicevic01",
+			"Millosh",
+			"Sasa Stefanovic",
+			"Михајло Анђелковић",
+			"Rancher"
+		]
+	},
+	"reviewedversions": "Проверене верзије",
+	"reviewedversions-leg1": "Списак проверених ревизија страница",
+	"reviewedversions-page": "Име странице:",
+	"reviewedversions-none": "„[[:$1]]“ нема проверених ревизија.",
+	"reviewedversions-list": "{{PLURAL:$2|Проверена је следећа ревизија|Проверене су следеће ревизије}} странице [[:$1]]:",
+	"reviewedversions-review": "Проверио $2 дана <i>$1</i>"
+}

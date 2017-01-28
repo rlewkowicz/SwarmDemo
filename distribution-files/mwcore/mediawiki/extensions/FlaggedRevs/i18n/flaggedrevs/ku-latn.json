@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"George Animal",
+			"Bikarhêner"
+		]
+	},
+	"flaggedrevs-hidereviewed": "Guherandinên nîşankirî $1",
+	"flaggedrevs-hidereviewed-hide": "Veşêre",
+	"flaggedrevs-hidereviewed-show": "Nîşan bide",
+	"group-editor": "Edîtor",
+	"group-editor-member": "{{GENDER:$1|edîtor}}",
+	"revreview-submitedit": "Guherandinan tomar bike",
+	"revreview-filter-all": "hemû",
+	"revreview-typefilter": "Cure:"
+}

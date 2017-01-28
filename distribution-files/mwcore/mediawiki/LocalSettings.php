@@ -16,7 +16,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 }
 
 
-#require_once("$IP/extensions/FlaggedRevs/FlaggedRevs.php");
+require_once("$IP/extensions/FlaggedRevs/FlaggedRevs.php");
 
 
 ## Uncomment this to disable output compression
