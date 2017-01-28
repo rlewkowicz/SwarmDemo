@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  phpfpm:
+    image: rlewkowicz/php-fpm:7.0.13
+    volumes:
+      - "./distribution-files/etc:/usr/local/etc"
+      - "./distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "/etc/group:/etc/group:ro"
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+
+  nginx:
+    image: nginx:1.10
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./distribution-files/nginx:/etc/nginx"
+      - "./distribution-files/mwcore/mediawiki:/var/www/mediawiki"
+      - "/etc/passwd:/etc/passwd:ro"
+      - "/etc/shadow:/etc/shadow:ro"
+      - "/etc/group:/etc/group:ro"
+    depends_on:
+      - phpfpm
+    deploy:
+      labels: [traefik.port=443,traefik.protocol=https, "traefik.frontend.entryPoints=http,https","traefik.frontend.rule=Host:prod", traefik.docker.network=traefik]
+
+  mysql:
+    image: mariadb:10.0
+    volumes:
+      - "./distribution-files/mysql:/var/lib/mysql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=@6gRzU2k8%
+      - MYSQL_USER=root@myadmin
+      - MYSQL_PASSWORD=@6gRzU2k8%
+    depends_on:
+      - nginx
+
+
