@@ -45,6 +45,12 @@ services:
     networks:
       - prod
 
+  parsoid:
+    image: rlewkowicz/parsoid:latest
+    volumes:
+      - "/mnt/cephfs/prod/distribution-files/parsoid/config.yaml:/usr/local/lib/node_modules/parsoid/config.yaml"
+    networks:
+      - prod
 
 networks:
   prod:

@@ -168,5 +168,5 @@ wfLoadExtension( 'Interwiki' );
 wfLoadExtension( 'Poem' );
 wfLoadExtension( 'SyntaxHighlight_GeSHi' );
 wfLoadExtension( 'WikiEditor' );
-#wfLoadExtension( 'VisualEditor' );
+wfLoadExtension( 'VisualEditor' );
 

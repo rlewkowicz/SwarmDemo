@@ -40,4 +40,7 @@ services:
     depends_on:
       - nginx
 
-
+  parsoid:
+    image: rlewkowicz/parsoid:latest
+    volumes:
+      - "./distribution-files/parsoid/config.yaml:/usr/local/lib/node_modules/parsoid/config.yaml"
